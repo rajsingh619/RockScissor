@@ -11,6 +11,8 @@ function getComputerChoice(){
 }
 
 
+
+
 function playRound(computerSelection,playerSelection){
     let winner;
     if(playerSelection=="ROCK"){
@@ -48,40 +50,46 @@ function playRound(computerSelection,playerSelection){
     }
     return winner;
 }
-function game(){
-    let Machine =0;
-    let Player = 0;
-    for(let i =0;i<5;i++){
-        let computerSelection = getComputerChoice();
-        let playerInput = prompt("Enter your weapon name: Rock/Paper/Scissor");
-        let playerSelection = playerInput.toUpperCase();
-        let winner = playRound(computerSelection,playerSelection);
-        if(winner ==0){
-            console.log(`It's a tie! You both chose ${playerSelection}`);
-            console.log(`Machine = ${Machine}`);
-            console.log(`Player = ${Player}`);
-        }
-        if(winner == 1){
-            console.log(`you won ${playerSelection} beats ${computerSelection}`);
-            Player = Player +1;
-            console.log(`Machine = ${Machine}`);
-            console.log(`Player = ${Player}`);
-        }
-        if(winner == -1){
-            console.log(`you lose! ${computerSelection} beats ${playerSelection}`);
-            Machine = Machine +1;
-            console.log(`Machine = ${Machine}`);
-            console.log(`Player = ${Player}`);
-        }
+
+const btns = document.querySelectorAll('button');
+btns.forEach((button) =>{
+    button.addEventListener('click',()=>{
+        const playerSelection = button.textContent.toUpperCase();
+        let res = playRound(getComputerChoice(),playerSelection);
+        printWinner(res);
+    });
+});
+let playerPoint = 0;
+let computerPoint = 0;
+const board = document.createElement('div');
+board.textContent=`Player = ${playerPoint} Computer = ${computerPoint}`;
+
+const game = document.querySelector('#container');
+game.appendChild(board);
+function printWinner(result){
+    if(playerPoint==4 && result ==1){
+        playerPoint++;
+        board.textContent=`Player = ${playerPoint} Computer = ${computerPoint} Game won by Player`;
+        playerPoint = 0;
+        computerPoint = 0;
     }
-    if(Player>Machine){
-        console.log("Hurray! You are the winner");
-    }
-    else if(Machine>Player){
-        console.log("Ahhhhh! you lost against the machine");
+    else if(computerPoint ==4 && result==-1){
+        computerPoint++;
+        board.textContent=`Player = ${playerPoint} Computer = ${computerPoint} Game won by Computer`;
+        playerPoint = 0;
+        computerPoint = 0;
     }
     else{
-        console.log("You both tied the game!");
+        if(result==-1){
+            computerPoint++;
+        }
+        else if(result==1){
+            playerPoint++;
+        }
+        board.textContent=`Player = ${playerPoint} Computer = ${computerPoint}`;
+        
     }
 }
-game();
+
+
+
